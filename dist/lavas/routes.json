@@ -1,0 +1,42 @@
+{
+    "mode": "history",
+    "base": "/",
+    "routes": [
+        {
+            "path": "/appshell",
+            "name": "appshell",
+            "meta": {}
+        },
+        {
+            "path": "/detail/:id",
+            "name": "detailId",
+            "meta": {}
+        },
+        {
+            "path": "/",
+            "name": "index",
+            "meta": {}
+        },
+        {
+            "path": "/mine-page",
+            "name": "minePage",
+            "meta": {}
+        },
+        {
+            "path": "/search",
+            "name": "search",
+            "meta": {}
+        },
+        {
+            "path": "/sort-page",
+            "name": "sortPage",
+            "meta": {}
+        },
+        {
+            "path": "/error",
+            "name": "error",
+            "meta": {},
+            "alias": "*"
+        }
+    ]
+}

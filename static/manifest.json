@@ -1,0 +1,35 @@
+{
+    "start_url": "/",
+    "name": "技能树",
+    "short_name": "技能树",
+    "icons": [
+        {
+            "src": "img/icons/tree-logo-180x180.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        },
+        {
+            "src": "img/icons/tree-logo-192x192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "img/icons/tree-logo-180x180.png",
+            "type": "image/png",
+            "sizes": "180x180 152x152 144x144"
+        },
+        {
+            "src": "img/tree-logo.png",
+            "type": "image/png",
+            "sizes": "152x152"
+        },
+        {
+            "src": "img/tree-logo.png",
+            "type": "image/png",
+            "sizes": "144x144"
+        }
+    ],
+    "display": "fullscreen",
+    "background_color": "#f0f0f0",
+    "theme_color": "#278fef"
+}
