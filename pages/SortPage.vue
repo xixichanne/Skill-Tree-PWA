@@ -60,7 +60,7 @@
         },
         methods: {
             getWindowHeight(){
-                this.pageSize=Math.floor((document.documentElement.clientHeight-200)/77)
+                this.pageSize=Math.floor((document.documentElement.clientHeight-200-40)/77)
             },
             loadClass() {
                 axios.get('/api/classify/getAll').then(resp => {

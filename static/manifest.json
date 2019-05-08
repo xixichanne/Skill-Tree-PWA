@@ -4,7 +4,7 @@
     "short_name": "技能树",
     "icons": [
         {
-            "src": "img/icons/tree-logo-180x180.png",
+            "src": "img/icons/tree-logo-512x512.png",
             "type": "image/png",
             "sizes": "512x512"
         },
@@ -16,15 +16,15 @@
         {
             "src": "img/icons/tree-logo-180x180.png",
             "type": "image/png",
-            "sizes": "180x180 152x152 144x144"
+            "sizes": "180x180"
         },
         {
-            "src": "img/tree-logo.png",
+            "src": "img/tree-logo-152x152.png",
             "type": "image/png",
             "sizes": "152x152"
         },
         {
-            "src": "img/tree-logo.png",
+            "src": "img/tree-logo-144x144.png",
             "type": "image/png",
             "sizes": "144x144"
         }

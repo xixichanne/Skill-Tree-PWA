@@ -2,114 +2,114 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
     
-import _155591113315927a9b8a6a7561641779828719bc5bf2d from '@/pages/AddTree.vue';
+import _155728544279927a9b8a6a7561641779828719bc5bf2d from '@/pages/AddTree.vue';
     
 
     
-import _15559111331599d49a922ebc8a6d77ca82c0a74289b98 from '@/pages/Appshell.vue';
+import _15572854427999d49a922ebc8a6d77ca82c0a74289b98 from '@/pages/Appshell.vue';
     
 
     
-import _1555911133159f7fc7554d202a317883db2ae067316d3 from '@/pages/detail/_id.vue';
+import _1557285442799f7fc7554d202a317883db2ae067316d3 from '@/pages/detail/_id.vue';
     
 
     
-import _1555911133159a3bbbb6092299605b3e29367bed9a88d from '@/pages/Details.vue';
+import _1557285442799a3bbbb6092299605b3e29367bed9a88d from '@/pages/Details.vue';
     
 
     
-import _1555911133159dbb11337b9d6bd1f446ad46a54ca21bc from '@/pages/EditTree.vue';
+import _1557285442799dbb11337b9d6bd1f446ad46a54ca21bc from '@/pages/EditTree.vue';
     
 
     
-import _1555911133159d2462dcf0c7beccd286c658e08187914 from '@/pages/Error.vue';
+import _1557285442799d2462dcf0c7beccd286c658e08187914 from '@/pages/Error.vue';
     
 
     
-import _155591113315967830448037326425509e44bce7632b7 from '@/pages/Index.vue';
+import _155728544279967830448037326425509e44bce7632b7 from '@/pages/Index.vue';
     
 
     
-import _15559111331591c344d083993d726b6efda48972bfdff from '@/pages/Login.vue';
+import _15572854427991c344d083993d726b6efda48972bfdff from '@/pages/Login.vue';
     
 
     
-import _15559111331592c58004fe2ef431bd86224afea9821c3 from '@/pages/MineBox.vue';
+import _15572854427992c58004fe2ef431bd86224afea9821c3 from '@/pages/MineBox.vue';
     
 
     
-import _15559111331598a9470268d489ea5c8b3e7a3550d2cc2 from '@/pages/MinePage.vue';
+import _15572854427998a9470268d489ea5c8b3e7a3550d2cc2 from '@/pages/MinePage.vue';
     
 
     
-import _15559111331592bad249c9c927ad4b88b56c77cc28aca from '@/pages/SortPage.vue';
+import _15572854427992bad249c9c927ad4b88b56c77cc28aca from '@/pages/SortPage.vue';
     
 
 
 let routes = [
     {
         "path": "/add-tree",
-        "component": _155591113315927a9b8a6a7561641779828719bc5bf2d,
+        "component": _155728544279927a9b8a6a7561641779828719bc5bf2d,
         "meta": {},
         "name": "addTree"
     },
     {
         "path": "/appshell",
-        "component": _15559111331599d49a922ebc8a6d77ca82c0a74289b98,
+        "component": _15572854427999d49a922ebc8a6d77ca82c0a74289b98,
         "meta": {},
         "name": "appshell"
     },
     {
         "path": "/detail/:id",
-        "component": _1555911133159f7fc7554d202a317883db2ae067316d3,
+        "component": _1557285442799f7fc7554d202a317883db2ae067316d3,
         "meta": {},
         "name": "detailId"
     },
     {
         "path": "/details",
-        "component": _1555911133159a3bbbb6092299605b3e29367bed9a88d,
+        "component": _1557285442799a3bbbb6092299605b3e29367bed9a88d,
         "meta": {},
         "name": "details"
     },
     {
         "path": "/edit-tree",
-        "component": _1555911133159dbb11337b9d6bd1f446ad46a54ca21bc,
+        "component": _1557285442799dbb11337b9d6bd1f446ad46a54ca21bc,
         "meta": {},
         "name": "editTree"
     },
     {
         "path": "/",
-        "component": _155591113315967830448037326425509e44bce7632b7,
+        "component": _155728544279967830448037326425509e44bce7632b7,
         "meta": {},
         "name": "index"
     },
     {
         "path": "/login",
-        "component": _15559111331591c344d083993d726b6efda48972bfdff,
+        "component": _15572854427991c344d083993d726b6efda48972bfdff,
         "meta": {},
         "name": "login"
     },
     {
         "path": "/mine-box",
-        "component": _15559111331592c58004fe2ef431bd86224afea9821c3,
+        "component": _15572854427992c58004fe2ef431bd86224afea9821c3,
         "meta": {},
         "name": "mineBox"
     },
     {
         "path": "/mine-page",
-        "component": _15559111331598a9470268d489ea5c8b3e7a3550d2cc2,
+        "component": _15572854427998a9470268d489ea5c8b3e7a3550d2cc2,
         "meta": {},
         "name": "minePage"
     },
     {
         "path": "/sort-page",
-        "component": _15559111331592bad249c9c927ad4b88b56c77cc28aca,
+        "component": _15572854427992bad249c9c927ad4b88b56c77cc28aca,
         "meta": {},
         "name": "sortPage"
     },
     {
         "path": "/error",
-        "component": _1555911133159d2462dcf0c7beccd286c658e08187914,
+        "component": _1557285442799d2462dcf0c7beccd286c658e08187914,
         "meta": {},
         "name": "error",
         "alias": "*"

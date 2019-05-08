@@ -8,8 +8,8 @@
                 </mu-avatar>
             </div>
             <div class="name">
-                <mu-text-field class="username-field" :disabled="editState" action-icon="create"
-                               @action-click="editState=false" solo>{{userInfo.userName}}
+                <mu-text-field class="username-field" action-icon="create" v-model="userInfo.userName"
+                               solo>
                 </mu-text-field>
                 <!--<mu-icon value="create" size="30" @click="editState=false"></mu-icon>-->
             </div>
@@ -19,10 +19,12 @@
                 <mu-list-item @click="">
                     <mu-icon value="send"/>
                     <mu-list-item-title>修改头像</mu-list-item-title>
+                    <input class="cover-file" name="file" type="file" accept="image/png,image/gif,image/jpeg"
+                           @change="uploadImg"/>
                 </mu-list-item>
-                <mu-list-item title="赞助一下" @click="">
+                <mu-list-item title="赞助一下">
                     <mu-icon value="inbox"/>
-                    <mu-list-item-title>赞助一下</mu-list-item-title>
+                    <mu-list-item-title  @click="support">赞助一下</mu-list-item-title>
                 </mu-list-item>
                 <mu-list-item title="github地址" @click="">
                     <mu-icon value="grade"/>
@@ -52,23 +54,57 @@
         data() {
             return {
                 userInfo: {
-                    headPic:'http://iph.href.lu/200x200?text=请上传头像'
+                    userName: '',
+                    headPic: 'http://iph.href.lu/200x200?text=请上传头像'
                 },
                 editState: true,
+                uptoken: '',
             }
         },
-
         methods: {
             loadUserInfo() {
                 let uid = this.$store.state.common.uid;
                 axios.get('/api/user/get-by-uid?uid=' + uid).then(resp => {
-                    this.userInfo = resp.data.data
+                    this.userInfo = resp.data.data;
+                    this.userInfo.userName = this.userInfo.userName ? this.userInfo.userName : this.userInfo.telNum
                 }).catch(err => {
                     console.log('请求失败：' + err.status + ',' + err.statusText);
                 });
             },
             exitLogin() {
                 this.$router.push({path: '/login'})
+            },
+            uploadImg(e) {
+                let that = this;
+                let file = e.target.files[0];
+                axios.post('http://localhost:81/qiniu/upload-with-no-pic-name')
+                    .then(function (response) {
+                        console.log('here' + response.data);
+                        that.uptoken = response.data;
+                        const axiosInstance = axios.create({withCredentials: false})
+                        let data = new FormData();
+                        data.append('token', response.data);
+                        data.append('file', file);
+                        axiosInstance({
+                            method: 'POST',
+                            url: 'http://up-z2.qiniup.com',
+                            data: data,
+                            timeout: 30000 // 超时时间，因为图片上传有可能需要很久
+                        }).then(data => {
+                            let url = 'https://pic.heartqiu.cn/' + data.data.key;
+                            that.userInfo.headPic = url
+                        }).catch((err) => {
+                            console.log(err)
+                        })
+                    })
+            },
+            support() {
+                this.$alert('Hello World', '赞助一下吧～', {
+                    okLabel: '知道了'
+                }).then(() => {
+                    this.$toast.message('提示信息');
+                });
+
             }
         },
         mounted() {
@@ -79,6 +115,29 @@
         },
         activated() {
             setState(this.$store);
+        },
+        beforeRouteLeave(to, from, next) {
+            axios.post("/api/user/update-by-uid", this.userInfo, {
+                    headers: {
+                        'accesstoken': this.$store.state.common.token
+                    }
+                }, {
+                    transformRequest: [
+                        function (data) {
+                            let params = '';
+                            for (let index in data) {
+                                params += index + '=' + data[index] + '&';
+                            }
+                            return params;
+                        }
+                    ]
+                }
+            ).then(resp => {
+                console.log(resp.data);
+            }).catch(err => {
+                console.log('请求失败：' + err.status + ',' + err.statusText);
+            });
+            next();
         }
     }
 </script>
@@ -90,8 +149,16 @@
     }
 
     .username-field {
+        width: 60%;
+        font-size: 20px;
+    }
+
+    .cover-file {
         width: 90px;
-        font-size: 30px;
+        height: 90px;
+        position: absolute;
+        left: 0;
+        opacity: 0;
     }
 </style>
 

@@ -4,8 +4,14 @@
             <mu-button icon slot="left" @click="$router.go(-1);">
                 <mu-icon value="arrow_back"></mu-icon>
             </mu-button>
-            <mu-button icon slot="right">
+            <mu-button icon slot="left">
+                <mu-icon value=""></mu-icon>
+            </mu-button>
+            <mu-button icon slot="right" @click="goEdit">
                 <mu-icon value="edit"></mu-icon>
+            </mu-button>
+            <mu-button icon slot="right" color="red" large @click="deleteTree">
+                <mu-icon value="delete"></mu-icon>
             </mu-button>
         </mu-appbar>
         <mu-container class="main-wrap">
@@ -44,7 +50,7 @@
                 <div class="brief-box">{{treeInfo.brief}}</div>
             </mu-row>
             <mu-alert color="info" @delete="alert1 = false" delete v-if="alert1" transition="mu-scale-transition" class="alert">
-                <mu-icon left value="info"></mu-icon>长按节点可点亮该技能哦～
+                <mu-icon left value="info"></mu-icon>长按节点可点亮或取消点亮该技能哦～
             </mu-alert>
             <div class="tree-background">
                 <mu-flex wrap="wrap" class="nodes-box">
@@ -73,7 +79,7 @@
                 </mu-flex>
             </div>
         </mu-container>
-        <mu-snackbar color="success" :open.sync="snackbarOpen" style="height: 80px;">
+        <mu-snackbar position="bottom" color="success" :open.sync="snackbarOpen" style="height: 80px;">
             <mu-icon left value="check_circle"></mu-icon>
             {{snackbarText}}
             <mu-button flat slot="action" color="#fff" @click="snackbarOpen = false">Close</mu-button>
@@ -349,6 +355,36 @@
                 this.snackbarTimer = setTimeout(() => {
                     that.snackbarOpen = false;
                 }, 3000);
+            },
+            goEdit(){
+                this.$router.push({path:'/add-tree',query:{sid:this.$route.query.sid}})
+            },
+            deleteTree(){
+                this.$confirm('确定要删除？', '提示', {
+                    type: 'warning'
+                }).then(({ result }) => {
+                    if (result) {
+                        axios.post('/api/skill/delete-skill', {sid:this.$route.query.sid}, {
+                            transformRequest: [
+                                function (data) {
+                                    let params = '';
+                                    for (let index in data) {
+                                        params += index + '=' + data[index] + '&';
+                                    }
+                                    return params;
+                                }
+                            ]
+                        }).then(resp => {
+                            console.log(resp.data);
+                            this.$router.go(-1);
+                        }).catch(err => {
+                            console.log('请求失败：' + err.status + ',' + err.statusText);
+                        });
+                    } else {
+
+                    }
+                });
+
             }
         },
         mounted() {

@@ -1,35 +1,43 @@
 <template>
-    <div style="height: fit-content" ref="wrapper">
+    <div style="height: -webkit-fill-available;" ref="wrapper">
         <mu-appbar class="app_bar" title="为您推荐" color="secondary"></mu-appbar>
-        <div :class="loading?'overlay':''" v-loading="loading">
-            <mu-load-more class="content-box" @load="load" :loading="loading" @refresh="refresh" :refreshing="refreshing" >
-                <mu-card v-for="(item, index) in recommandList" :key="index"
-                         style="width: 45%; max-width: 375px;margin:10px 0 0 3%!important;"
-                         @click="goDetail(item.sid)">
-                    <mu-card-media class="img-card-media" :title="item.title"
-                                   :sub-title="item.classifyFatherName+'-'+item.classifyChildName">
-                        <img :src="item.img">
-                    </mu-card-media>
-                    <mu-card-text>
-                        {{item.brief}}
-                    </mu-card-text>
-                    <mu-row style="font-size: 14px">
-                        <mu-col span="2">
-                            <mu-avatar size="25">
-                                <img :src="item.headPic">
-                            </mu-avatar>
-                        </mu-col>
-                        <mu-col span="3"><span>{{item.userName?item.userName:item.telNum}}</span></mu-col>
-                        <mu-col span="2" offset="3">
-                            <mu-icon value="favorite_border" color="red" size="20"></mu-icon>
-                        </mu-col>
-                        <mu-col span="2"><span>{{item.likes}}</span></mu-col>
-                    </mu-row>
-                </mu-card>
-                <mu-button class="load-button" flat color="secondary">加载更多
-                </mu-button>
-            </mu-load-more>
+        <div>
+            <scroller
+                :on-refresh="refresh"
+                :on-infinite="load"
+                ref="my_scroller"
+            >
+                <div style="height: 56px;"></div>
+                <div class="content-box">
+                    <mu-card v-for="(item, index) in recommandList" :key="index"
+                             style="width: 45%; max-width: 375px;margin:10px 0 0 3%!important;"
+                             @click="goDetail(item.sid)">
+                        <mu-card-media class="img-card-media" :title="item.title"
+                                       :sub-title="item.classifyFatherName+'-'+item.classifyChildName">
+                            <img :src="item.img">
+                        </mu-card-media>
+                        <mu-card-text>
+                            {{item.brief}}
+                        </mu-card-text>
+                        <mu-row style="font-size: 14px">
+                            <mu-col span="2">
+                                <mu-avatar size="25">
+                                    <img :src="item.headPic">
+                                </mu-avatar>
+                            </mu-col>
+                            <mu-col span="3"><span>{{item.userName?item.userName:item.telNum}}</span></mu-col>
+                            <mu-col span="2" offset="3">
+                                <mu-icon value="favorite_border" color="red" size="20"></mu-icon>
+                            </mu-col>
+                            <mu-col span="2"><span>{{item.likes}}</span></mu-col>
+                        </mu-row>
+                    </mu-card>
+
+                </div>
+            </scroller>
         </div>
+        <!--<mu-button class="load-button" flat color="secondary" @click="load">加载更多-->
+        <!--</mu-button>-->
     </div>
 </template>
 
@@ -58,18 +66,79 @@
         data() {
             return {
                 count: 111,
-                loading: false,
-                refreshing: false,
                 recommandList: [],
-                page: 0,
+                page: -1,
                 size: 10,
-                scroll:''
+                scroll: ''
             }
         },
         methods: {
-            loadIndex(page, size) {
-                this.loading = true;
-                axios.post('/api/skill/index', {page: page, size: size}, {
+            // loadIndex(page, size) {
+            //     axios.post('/api/skill/index', {page: page, size: size}, {
+            //             transformRequest: [
+            //                 function (data) {
+            //                     let params = '';
+            //                     for (let index in data) {
+            //                         params += index + '=' + data[index] + '&';
+            //                     }
+            //                     return params;
+            //                 }
+            //             ]
+            //         }
+            //     ).then(resp => {
+            //         console.log(resp.data);
+            //         this.recommandList.push(...resp.data.data);
+            //         this.recommandList.concat(resp.data.data);
+            //         this.$refs.my_scroller.finishPullToRefresh();
+            //         this.$refs.my_scroller.finishInfinite(0);
+            //         console.log(this.recommandList)
+            //         // console.log(document.documentElement.scrollTop,this.scroll)
+            //         // this.changeScrollTop();
+            //     }).catch(err => {
+            //         console.log('请求失败：' + err.status + ',' + err.statusText);
+            //         this.$refs.my_scroller.finishPullToRefresh();
+            //         this.$refs.my_scroller.finishInfinite(0);
+            //     });
+            // },
+            goDetail(sid) {
+                this.$router.push({path: '/details', query: {sid: sid}})
+            },
+            load(done) {
+                this.page += 1;
+                axios.post('/api/skill/index', {page: this.page, size: this.size}, {
+                        transformRequest: [
+                            function (data) {
+                                let params = '';
+                                for (let index in data) {
+                                    params += index + '=' + data[index] + '&';
+                                }
+                                return params;
+                            }
+                        ]
+                    }
+                ).then(resp => {
+                    console.log(resp.data);
+                    if (resp.data.data.length == 0) {
+                        done(true)
+                         this.$refs.my_scroller.finishInfinite(2);
+                        this.infinite = undefined
+                    } else {
+                        this.recommandList.push(...resp.data.data);
+                        // this.recommandList.concat(resp.data.data);
+                        done(true)
+                    }
+                    console.log(this.recommandList)
+                    // console.log(document.documentElement.scrollTop,this.scroll)
+                    // this.changeScrollTop();
+                }).catch(err => {
+                    console.log('请求失败：' + err.status + ',' + err.statusText);
+                    done(true)
+                });
+            },
+            refresh(done) {
+                this.recommandList = [];
+                this.page=0;
+                axios.post('/api/skill/index', {page: this.page, size: this.size}, {
                         transformRequest: [
                             function (data) {
                                 let params = '';
@@ -83,47 +152,20 @@
                 ).then(resp => {
                     console.log(resp.data);
                     this.recommandList.push(...resp.data.data);
-                    this.recommandList.concat(resp.data.data);
-                    this.loading = false;
-                    console.log(document.documentElement.scrollTop,this.scroll)
-                    this.changeScrollTop();
+                    // this.recommandList.concat(resp.data.data);
+                    console.log(this.recommandList)
+                    done()
+                    this.$refs.my_scroller.finishInfinite(2);
                 }).catch(err => {
                     console.log('请求失败：' + err.status + ',' + err.statusText);
+                    done()
                 });
             },
-            goDetail(sid) {
-                this.$router.push({path: '/details', query: {sid: sid}})
-            },
-            changeScrollTop(){
-                this.$nextTick(() => {
-                    document.documentElement.scrollTop = this.scroll;
-                    console.log(document.documentElement.scrollTop)
-                })
-            },
-            load() {
-                let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
-                let wrapperScrollTop = this.$refs.wrapper.scrollTop;
-                console.log('scrollTop', scrollTop);
-                this.scroll = scrollTop;
-                this.page += 1;
-                this.loadIndex(this.page, this.size)
-            },
-            refresh () {
-                this.refreshing = true;
-                this.recommandList=[];
-                this.loadIndex(0, 10);
-                this.refreshing = false;
-
-            },
-        },
-        mounted() {
-            this.loadIndex(0, 10);
         },
         async asyncData({store, route}) {
             setState(store);
         },
         activated() {
-            this.$refs.wrapper.scrollTop = this.scroll
             setState(this.$store);
         },
     };
@@ -138,6 +180,8 @@
 
     .app_bar
         width 100%
+        z-index 1000
+        position relative
 
     .content-box
         display flex
@@ -147,6 +191,7 @@
         width 100%
         height fit-content
         -webkit-overflow-scrolling touch
+        z-index 10
 
     mu-card:last-child
         flex-basis 100%

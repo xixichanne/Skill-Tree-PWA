@@ -285,7 +285,7 @@
             },
             showDetail(){
                 this.open=true
-            }
+            },
         },
         mounted() {
             this.loadDetails();
