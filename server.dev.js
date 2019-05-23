@@ -24,7 +24,7 @@ if (process.argv.length >= 3 && process.argv[2] !== 'dev') {
 var proxyTable = {
     // proxy table example
     '/api': {
-        target: 'http://localhost:81',
+        target: 'http://129.204.115.74:81',
         changeOrigin: true
     }
 };
@@ -33,7 +33,7 @@ var port = process.env.PORT || 3000;
 var core = new LavasCore(__dirname);
 var app;
 var server;
-
+// app.listen(3000)
 process.env.NODE_ENV = 'development';
 
 /**
@@ -49,7 +49,7 @@ function startDevServer() {
             });
 
             app.use(core.expressMiddleware());
-
+            // app.listen(3000)
             /**
              * server.close() only stop accepting new connections,
              * we need to close existing connections with help of stoppable

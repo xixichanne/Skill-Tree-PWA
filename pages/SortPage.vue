@@ -1,6 +1,6 @@
 <template>
     <div class="container-wrap">
-        <mu-tabs :value.sync="active" color="#2d3a3a" class="tab-box" indicator-color="#3e885b">
+        <mu-tabs :value.sync="active" color="secondary" class="tab-box" indicator-color="#3e885b">
             <mu-tab v-for="(item,index) in classFather" :key="index" class="class-father" @click="changeTab(item)">{{item.name}}</mu-tab>
         </mu-tabs>
         <div v-for="(item,index) in classFather" :key="index" v-if="active === index" class="sub-tab-list">
@@ -12,7 +12,8 @@
             </mu-paper>
         </div>
         <mu-list class="main-content">
-            <mu-list-item avatar :ripple="false" button v-for="(item,index) in treeList" :key="index" class="tree-item" @click="goDetail(item.sid)">
+            <p v-if="treeList.length==0" style="width: fit-content;margin: 80px;}">暂无更多数据</p>
+            <mu-list-item v-else avatar :ripple="false" button v-for="(item,index) in treeList" :key="index" class="tree-item" @click="goDetail(item)">
                 <mu-list-item-action>
                     <img :src="item.img" class="tree-img">
                 </mu-list-item-action>
@@ -53,7 +54,7 @@
                 page:0,
                 pageSize: 0,
                 cid:1,
-                ccid:1,
+                ccid:9,
                 btn1:true,
                 btn2:false,
             };
@@ -90,6 +91,11 @@
                 ).then(resp => {
                     console.log(resp.data);
                     this.treeList = resp.data.data
+                    if(this.treeList.length<this.pageSize){
+                        this.btn2=true
+                    }else{
+                        this.btn2=false
+                    }
                 }).catch(err => {
                     console.log('请求失败：' + err.status + ',' + err.statusText);
                 });
@@ -100,8 +106,12 @@
                 this.ccid=item.childs[0].ccid
                 this.getClassContent();
             },
-            goDetail(sid){
-                this.$router.push({path:'/details',query:{sid:sid}})
+            goDetail(item) {
+                if(item.creater==this.$store.state.common.uid){
+                    this.$router.push({path:'/edit-tree',query:{sid:item.sid}})
+                }else{
+                    this.$router.push({path: '/details', query: {sid: item.sid}})
+                }
             },
             beforePage(){
                 if(this.page){
@@ -121,7 +131,7 @@
         mounted() {
             this.loadClass();
             this.getWindowHeight();
-            this.getClassContent(1, 1)
+            this.getClassContent()
         },
         async asyncData({store, route}) {
             setState(store);

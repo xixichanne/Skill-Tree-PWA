@@ -1,5 +1,5 @@
 {
-    "buildVersion": 1557285442781,
+    "buildVersion": 1558111114243,
     "build": {
         "ssr": false,
         "publicPath": "/",
@@ -9,7 +9,9 @@
     "middleware": {
         "all": [],
         "server": [],
-        "client": []
+        "client": [
+            "login"
+        ]
     },
     "router": {
         "mode": "history",

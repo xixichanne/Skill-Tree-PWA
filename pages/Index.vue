@@ -8,13 +8,27 @@
                 ref="my_scroller"
             >
                 <div style="height: 56px;"></div>
+                <mu-carousel transition="fade" style="height: 200px;width: 92%;border-radius: 10px; margin: 20px auto;">
+                    <mu-carousel-item>
+                        <img class="banner-pic" :src="carouselImg1" @click="$router.push({path: '/details?sid=21'})">
+                    </mu-carousel-item>
+                    <mu-carousel-item>
+                        <img class="banner-pic" :src="carouselImg2">
+                    </mu-carousel-item>
+                    <mu-carousel-item>
+                        <img class="banner-pic" :src="carouselImg3">
+                    </mu-carousel-item>
+                    <mu-carousel-item>
+                        <img class="banner-pic" :src="carouselImg4">
+                    </mu-carousel-item>
+                </mu-carousel>
                 <div class="content-box">
                     <mu-card v-for="(item, index) in recommandList" :key="index"
-                             style="width: 45%; max-width: 375px;margin:10px 0 0 3%!important;"
-                             @click="goDetail(item.sid)">
+                             style="width: 45%; max-width: 375px;margin:10px 0 0 3%!important;border-radius: 10px;"
+                             @click="goDetail(item)">
                         <mu-card-media class="img-card-media" :title="item.title"
                                        :sub-title="item.classifyFatherName+'-'+item.classifyChildName">
-                            <img :src="item.img">
+                            <img :src="item.img" style="height: 170px;border-radius: 10px;">
                         </mu-card-media>
                         <mu-card-text>
                             {{item.brief}}
@@ -61,7 +75,8 @@
             meta: [
                 {name: 'keywords', content: 'lavas PWA'},
                 {name: 'description', content: '基于 Vue 的 PWA 解决方案，帮助开发者快速搭建 PWA 应用，解决接入 PWA 的各种问题'}
-            ]
+            ],
+
         },
         data() {
             return {
@@ -69,7 +84,11 @@
                 recommandList: [],
                 page: -1,
                 size: 10,
-                scroll: ''
+                scroll: '',
+                carouselImg1:'static/img/banner1.jpeg',
+                carouselImg2:'static/img/banner2.jpeg',
+                carouselImg3:'static/img/banner3.jpeg',
+                carouselImg4:'static/img/banner2.jpeg'
             }
         },
         methods: {
@@ -100,8 +119,12 @@
             //         this.$refs.my_scroller.finishInfinite(0);
             //     });
             // },
-            goDetail(sid) {
-                this.$router.push({path: '/details', query: {sid: sid}})
+            goDetail(item) {
+                if(item.creater==this.$store.state.common.uid){
+                    this.$router.push({path:'/edit-tree',query:{sid:item.sid}})
+                }else{
+                    this.$router.push({path: '/details', query: {sid: item.sid}})
+                }
             },
             load(done) {
                 this.page += 1;
@@ -187,7 +210,7 @@
         display flex
         flex-flow row wrap
         justify-content start
-        align-items baseline
+        /*align-items baseline*/
         width 100%
         height fit-content
         -webkit-overflow-scrolling touch
@@ -224,4 +247,6 @@
 
     .load-button
         margin-bottom 10px
+    .banner-pic
+        height 200px
 </style>

@@ -183,7 +183,7 @@ $page-transition-duration = 0.35s
         right 0
         left 0
         padding-bottom 60px
-        margin-bottom 70px
+        /*margin-bottom 70px*/
         -webkit-overflow-scrolling touch
         background #f0f0f0
 

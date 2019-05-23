@@ -52,7 +52,7 @@
                         </mu-paper>
                         <mu-list slot="content" class="popup-class" dense>
                             <mu-sub-header>{{item.title}}</mu-sub-header>
-                            <mu-list-item button v-for="(jtem,jndex) in item.childs" :key="jndex">
+                            <mu-list-item button v-for="(jtem,jndex) in item.childs" :key="jndex"  @click="goNodeDetail(jtem)">
                                 <mu-list-item-content>
                                     <mu-list-item-action style="display: inline">
                                         <mu-icon value="menu"></mu-icon>
@@ -286,6 +286,10 @@
             showDetail(){
                 this.open=true
             },
+            goNodeDetail(item){
+                console.log(item)
+                this.$router.push({path:"/node-detail",query:{name:item.name,content:item.content}})
+            }
         },
         mounted() {
             this.loadDetails();

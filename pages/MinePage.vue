@@ -3,9 +3,11 @@
         <mu-appbar style="width: 100%;" color="secondary" title="个人中心"></mu-appbar>
         <div class="header">
             <div class="head">
-                <mu-avatar size=90>
-                    <img :src="userInfo.headPic">
-                </mu-avatar>
+                <mu-button v-loading="loading" fab style="width: 90px;height: 90px" disabled>
+                    <mu-avatar size=90>
+                        <img :src="userInfo.headPic">
+                    </mu-avatar>
+                </mu-button>
             </div>
             <div class="name">
                 <mu-text-field class="username-field" action-icon="create" v-model="userInfo.userName"
@@ -24,15 +26,11 @@
                 </mu-list-item>
                 <mu-list-item title="赞助一下">
                     <mu-icon value="inbox"/>
-                    <mu-list-item-title  @click="support">赞助一下</mu-list-item-title>
+                    <mu-list-item-title @click="support">赞助一下</mu-list-item-title>
                 </mu-list-item>
                 <mu-list-item title="github地址" @click="">
                     <mu-icon value="grade"/>
-                    <mu-list-item-title>github地址</mu-list-item-title>
-                </mu-list-item>
-                <mu-list-item title="清除缓存" @click="">
-                    <mu-icon value="drafts"/>
-                    <mu-list-item-title>清除缓存</mu-list-item-title>
+                    <mu-list-item-title @click="githubAddr">github地址</mu-list-item-title>
                 </mu-list-item>
             </mu-list>
             <!--<mu-divider/>-->
@@ -59,6 +57,7 @@
                 },
                 editState: true,
                 uptoken: '',
+                loading:false
             }
         },
         methods: {
@@ -77,6 +76,7 @@
             uploadImg(e) {
                 let that = this;
                 let file = e.target.files[0];
+                that.loading=true;
                 axios.post('http://localhost:81/qiniu/upload-with-no-pic-name')
                     .then(function (response) {
                         console.log('here' + response.data);
@@ -92,19 +92,35 @@
                             timeout: 30000 // 超时时间，因为图片上传有可能需要很久
                         }).then(data => {
                             let url = 'https://pic.heartqiu.cn/' + data.data.key;
-                            that.userInfo.headPic = url
+                            that.userInfo.headPic = url;
+                            that.loading=false
                         }).catch((err) => {
                             console.log(err)
                         })
                     })
             },
             support() {
-                this.$alert('Hello World', '赞助一下吧～', {
+                this.$alert(function(h,params){
+                    return h("img", {
+                    domProps: {
+                        src: "https://pic.heartqiu.cn/FgTVyLFD8XIT3h4zMM_61K_jl2k_"
+                    },
+                    style: {
+                        width: "135px",
+                        height: "135px",
+                        margin: "8px 0px",
+                    },
+                })}, '赞助一下吧～', {
                     okLabel: '知道了'
                 }).then(() => {
-                    this.$toast.message('提示信息');
                 });
 
+            },
+            githubAddr(){
+                this.$alert('https://github.com/xixichanne/Skill-Tree-PWA', '欢迎star', {
+                    okLabel: '知道了'
+                }).then(() => {
+                });
             }
         },
         mounted() {
@@ -149,7 +165,7 @@
     }
 
     .username-field {
-        width: 60%;
+        width: 50%;
         font-size: 20px;
     }
 

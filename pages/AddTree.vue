@@ -5,9 +5,11 @@
             <mu-row class="info-box">
                 <mu-col span="4" align-self="center">
                     <mu-paper class="upload-photo" :z-depth="3">
-                        <img :src="treeForm.img" class="cover-img"/>
-                        <input class="cover-file" name="file" type="file" accept="image/png,image/gif,image/jpeg"
-                               @change="uploadImg"/>
+                        <mu-button v-loading="loading" style="width: 90px;height: 90px" disabled>
+                            <img :src="treeForm.img" class="cover-img"/>
+                            <input class="cover-file" name="file" type="file" accept="image/png,image/gif,image/jpeg"
+                                   @change="uploadImg"/>
+                        </mu-button>
                     </mu-paper>
                 </mu-col>
                 <mu-col span="8">
@@ -76,7 +78,9 @@
             </mu-row>
             <mu-button slot="actions" flat color="secondary" @click="addNodeHandle()">确定</mu-button>
             <mu-button slot="actions" flat color="secondary" @click="nodeModal=false">取消</mu-button>
-            <mu-button v-if="deleteBtn" slot="actions" color="red" @click="deleteNodeHandle()">删除<mu-icon right value="delete"></mu-icon></mu-button>
+            <mu-button v-if="deleteBtn" slot="actions" color="red" @click="deleteNodeHandle()">删除
+                <mu-icon right value="delete"></mu-icon>
+            </mu-button>
         </mu-dialog>
         <mu-snackbar position="bottom" color="error" :open.sync="snackbarOpen" style="height: 80px;">
             <mu-icon left value="warning"></mu-icon>
@@ -161,7 +165,7 @@
                 // coverImg: 'static/img/cover-img.jpg',
                 uptoken: '',
                 treeForm: {
-                    sid:null,
+                    sid: null,
                     img: 'static/img/cover-img.jpg',
                     title: '',
                     brief: '',
@@ -170,16 +174,18 @@
                     nodes: ''
                 },
                 jobBtn: true,
-                deleteBtn:false,
+                deleteBtn: false,
                 text: '先选行业',
                 nodeInfo: {
                     title: '',
                     positionCode: '',
                     childs: [],
-                    light:0
+                    light: 0
                 },
-                treeInfo:{},
-                nodeDetails:[],
+                treeInfo: {},
+                nodeDetails: [],
+                loading:false,
+                classifyChild:''
             }
         },
         methods: {
@@ -197,20 +203,22 @@
                     }
                 ).then(resp => {
                     console.log(resp.data);
-                    this.treeForm=resp.data.data.skill;
-                    this.classify=resp.data.data.classify;
+                    this.treeForm = resp.data.data.skill;
+                    this.classifyChild = resp.data.data.classify.childName;
+                    console.log(this.treeForm.classifyChild)
                     this.loadNodes();
+                    this.loadTinyClass()
                 }).catch(err => {
                     console.log('请求失败：' + err.status + ',' + err.statusText);
                 });
             },
-            loadNodes(){
-                let nodes=this.treeForm.nodes.split(' ')
+            loadNodes() {
+                let nodes = this.treeForm.nodes.split(' ')
                 nodes.pop();
                 console.log(nodes)
                 let promiseArr = [];
-                nodes.forEach(item=>{
-                    promiseArr.push(new Promise((resolve,reject) => {
+                nodes.forEach(item => {
+                    promiseArr.push(new Promise((resolve, reject) => {
                         axios.post('/api/skill/get-node-by-nid', {nodeId: item}, {
                                 transformRequest: [
                                     function (data) {
@@ -225,7 +233,7 @@
                         ).then(resp => {
                             // this.$set(this.nodeList, resp.data.data.positionCode, {name: resp.data.data.title, nid: resp.data.data.nid});
                             this.nodeDetails.push(resp.data.data)
-                            console.log(this.nodeList,this.nodeDetails)
+                            console.log(this.nodeList, this.nodeDetails)
                             resolve()
                         }).catch(err => {
                             console.log('请求失败：' + err.status + ',' + err.statusText);
@@ -234,19 +242,19 @@
                     }))
 
                 });
-                Promise.all(promiseArr).then(val=>{
-                    this.nodeDetails.forEach(item=>{
-                        item.childs=JSON.parse(item.childs)
-                        this.nodeList.splice(item.positionCode,1,item)
+                Promise.all(promiseArr).then(val => {
+                    this.nodeDetails.forEach(item => {
+                        item.childs = JSON.parse(item.childs)
+                        this.nodeList.splice(item.positionCode, 1, item)
                     });
                     console.log(this.nodeList)
                 })
             },
-            queryNodes(){
-                let nodes=this.treeInfo.nodes.split(' ')
+            queryNodes() {
+                let nodes = this.treeInfo.nodes.split(' ')
                 nodes.pop();
                 console.log(nodes)
-                nodes.forEach(item=>{
+                nodes.forEach(item => {
                     axios.post('/api/skill/get-node-by-nid', {nodeId: item}, {
                             transformRequest: [
                                 function (data) {
@@ -284,7 +292,7 @@
                 }
                 this.nodeInfo.childs = this.nodeChildList[0].name ? JSON.stringify(this.nodeChildList) : '[]';
                 console.log(this.nodeInfo)
-                axios.post('http://localhost:81/api/skill/add-node', this.nodeInfo, {
+                axios.post('/api/skill/add-node', this.nodeInfo, {
                         transformRequest: [
                             function (data) {
                                 let params = '';
@@ -295,24 +303,15 @@
                             }
                         ]
                     }
-                )
-                // axios({
-                //     method:'post',
-                //     url:'/api/skill/add-node',
-                //     data: JSON.stringify(this.nodeInfo),
-                //     headers:{
-                //         'Content-Type':'application/json;charset=UTF-8'
-                //     }
-                // })
-                    .then(resp => {
-                    if(resp.data.code==200){
-                        console.log(resp.data);
-                        this.treeForm.nodes = this.treeForm.nodes + resp.data.data + " ";
-                        this.$set(this.nodeList, this.nodeInfo.positionCode, this.nodeInfo);
-                        this.nodeList[this.nodeInfo.positionCode].childs=JSON.parse(this.nodeList[this.nodeInfo.positionCode].childs)
-                        console.log(this.nodeInfo.positionCode, this.nodeList)
-                    }
-                }).catch(err => {
+                ).then(resp => {
+                        if (resp.data.code == 200) {
+                            console.log(resp.data);
+                            this.treeForm.nodes = this.treeForm.nodes + resp.data.data + " ";
+                            this.$set(this.nodeList, this.nodeInfo.positionCode, this.nodeInfo);
+                            this.nodeList[this.nodeInfo.positionCode].childs = JSON.parse(this.nodeList[this.nodeInfo.positionCode].childs)
+                            console.log(this.nodeInfo.positionCode, this.nodeList)
+                        }
+                    }).catch(err => {
                     console.log('请求失败：' + err.status + ',' + err.statusText);
                 });
                 this.nodeModal = false
@@ -320,6 +319,7 @@
             uploadImg(e) {
                 let that = this;
                 let file = e.target.files[0];
+                that.loading=true;
                 axios.post('http://localhost:81/qiniu/upload-with-no-pic-name')
                     .then(function (response) {
                         console.log('here' + response.data);
@@ -335,7 +335,8 @@
                             timeout: 30000 // 超时时间，因为图片上传有可能需要很久
                         }).then(data => {
                             let url = 'https://pic.heartqiu.cn/' + data.data.key;
-                            that.treeForm.img = url
+                            that.treeForm.img = url;
+                            that.loading=false;
                         }).catch((err) => {
                             console.log(err)
                         })
@@ -350,28 +351,28 @@
                         that.snackbarOpen = false;
                     }, 2000);
                     return;
-                }else if(!this.treeForm.title){
+                } else if (!this.treeForm.title) {
                     this.snackbarOpen = true;
                     this.snackbarText = '请先输入技能树标题';
                     this.snackbarTimer = setTimeout(() => {
                         that.snackbarOpen = false;
                     }, 2000);
                     return;
-                }else if(!this.treeForm.classifyFather){
+                } else if (!this.treeForm.classifyFather) {
                     this.snackbarOpen = true;
                     this.snackbarText = '请先选择技能树所属行业';
                     this.snackbarTimer = setTimeout(() => {
                         that.snackbarOpen = false;
                     }, 2000);
                     return;
-                }else if(!this.treeForm.classifyChild){
+                } else if (!this.treeForm.classifyChild) {
                     this.snackbarOpen = true;
                     this.snackbarText = '请先选择技能树所属职业';
                     this.snackbarTimer = setTimeout(() => {
                         that.snackbarOpen = false;
                     }, 2000);
                     return;
-                }else if(!this.treeForm.brief){
+                } else if (!this.treeForm.brief) {
                     this.snackbarOpen = true;
                     this.snackbarText = '请先至少填写一句技能树简介';
                     this.snackbarTimer = setTimeout(() => {
@@ -379,11 +380,11 @@
                     }, 2000);
                     return;
                 }
-                let url='';
-                if(this.treeForm.sid){
-                    url='/api/skill/update-skill-by-sid'
-                }else{
-                    url='/api/skill/add-skill-tree'
+                let url = '';
+                if (this.treeForm.sid) {
+                    url = '/api/skill/update-skill-by-sid'
+                } else {
+                    url = '/api/skill/add-skill-tree'
                 }
                 axios.post(url, this.treeForm, {
                         headers: {
@@ -418,7 +419,7 @@
                 });
             },
             loadTinyClass() {
-                this.treeForm.classifyChild = ''
+                this.treeForm.classifyChild = this.classifyChild
                 this.bigClass.forEach(item => {
                     if (item.classifyId == this.treeForm.classifyFather) {
                         this.tinyClass = item.childs;
@@ -426,9 +427,10 @@
                         this.text = ''
                     }
                 })
+                console.log(this.treeForm.classifyChild)
             },
-            openNode(index,tag) {//1是新增，2是修改
-                if(tag==1){
+            openNode(index, tag) {//1是新增，2是修改
+                if (tag == 1) {
                     this.nodeChildList = [
                         {
                             name: '',
@@ -439,10 +441,10 @@
                         title: '',
                         positionCode: '',
                         childs: [],
-                        light:0
+                        light: 0
                     };
-                    this.deleteBtn=false
-                }else{
+                    this.deleteBtn = false
+                } else {
                     // axios.post('/api/skill/get-node-by-nid', {nodeId: item}, {
                     //         transformRequest: [
                     //             function (data) {
@@ -464,10 +466,10 @@
                         title: this.nodeList[index].title,
                         positionCode: index,
                         childs: this.nodeList[index].childs,
-                        light:this.nodeList[index].light?1:0
+                        light: this.nodeList[index].light ? 1 : 0
                     };
                     this.nodeChildList = this.nodeList[index].childs;
-                    this.deleteBtn=true
+                    this.deleteBtn = true
                 }
                 this.nodeModal = true;
                 this.nodeInfo.positionCode = index;
@@ -475,14 +477,14 @@
             deleteName(index) {
                 this.nodeList[index].name = '';
             },
-            deleteNodeHandle(){
-                this.$set(this.nodeList,this.nodeInfo.positionCode,{nid:''});
-                this.nodeModal=false;
+            deleteNodeHandle() {
+                this.$set(this.nodeList, this.nodeInfo.positionCode, {nid: ''});
+                this.nodeModal = false;
             }
         },
         mounted() {
-            this.treeForm.sid=this.$route.query.sid;
-            if(this.treeForm.sid){
+            this.treeForm.sid = this.$route.query.sid;
+            if (this.treeForm.sid) {
                 this.loadDetails();
             }
             this.loadClasses()
@@ -586,14 +588,13 @@
     }
 
     .node-name {
-        /*font-size: 20px;*/
-        /*font-weight: 700;*/
-        /*position: relative;*/
-        /*top: -25%;*/
-        /*width: 50px;*/
         font-size: 14px;
-        line-height: 50px;
+        /* line-height: 50px; */
         font-weight: 400;
+        display: table-cell;
         height: 50px;
+        width: 60px;
+        text-align: center;
+        vertical-align: middle;
     }
 </style>

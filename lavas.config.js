@@ -79,6 +79,6 @@ module.exports = {
     middleware: {
         all: [], // 前后端均执行
         server: [], // 仅服务器端执行
-        client: []  // 仅浏览器端执行
+        client: ['login']  // 仅浏览器端执行
     }
 };
