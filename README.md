@@ -30,11 +30,11 @@ Lavas 工程模版基于 [vue-template-vue](https://github.com/lavas-project/lav
 
 ## 界面截图
 
-![登录页](https://github.com/xixichanne/Skill-Tree-PWA/blob/master/static/img/readme/1.png)
-![首页](https://github.com/xixichanne/Skill-Tree-PWA/blob/master/static/img/readme/2.png)
-![技能树详情页](https://github.com/xixichanne/Skill-Tree-PWA/blob/master/static/img/readme/3.png)
-![分类页](https://github.com/xixichanne/Skill-Tree-PWA/blob/master/static/img/readme/4.png)
-![资料盒页](https://github.com/xixichanne/Skill-Tree-PWA/blob/master/static/img/readme/5.png)
-![我的技能树页](https://github.com/xixichanne/Skill-Tree-PWA/blob/master/static/img/readme/7.png)
-![新增技能树页](https://github.com/xixichanne/Skill-Tree-PWA/blob/master/static/img/readme/8.png)
-![个人中心页](https://github.com/xixichanne/Skill-Tree-PWA/blob/master/static/img/readme/6.png)
+<img src="https://github.com/xixichanne/Skill-Tree-PWA/raw/master/static/img/readme/1.png" alt="登录页" style="width: 375px;">
+<img src="https://github.com/xixichanne/Skill-Tree-PWA/raw/master/static/img/readme/2.png" alt="首页" style="width: 375px;">
+<img src="https://github.com/xixichanne/Skill-Tree-PWA/raw/master/static/img/readme/3.png" alt="技能树详情页" style="width: 375px;">
+<img src="https://github.com/xixichanne/Skill-Tree-PWA/raw/master/static/img/readme/4.png" alt="分类页" style="width: 375px;">
+<img src="https://github.com/xixichanne/Skill-Tree-PWA/raw/master/static/img/readme/5.png" alt="资料盒页" style="width: 375px;">
+<img src="https://github.com/xixichanne/Skill-Tree-PWA/raw/master/static/img/readme/7.png" alt="我的技能树页" style="width: 375px;">
+<img src="https://github.com/xixichanne/Skill-Tree-PWA/raw/master/static/img/readme/8.png" alt="新增技能树页" style="width: 375px;">
+<img src="https://github.com/xixichanne/Skill-Tree-PWA/raw/master/static/img/readme/6.png" alt="个人中心页" style="width: 375px;">
