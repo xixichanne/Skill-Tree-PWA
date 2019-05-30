@@ -28,4 +28,13 @@ Lavas 工程模版基于 [vue-template-vue](https://github.com/lavas-project/lav
 
 详细的 Changelog 请看 [Release Notes](https://github.com/lavas-project/lavas-template-vue/releases)
 
-![](static/img/readme/1.png)
+## 界面截图
+
+![登录页](https://github.com/xixichanne/Skill-Tree-PWA/blob/master/static/img/readme/1.png)
+![首页](https://github.com/xixichanne/Skill-Tree-PWA/blob/master/static/img/readme/2.png)
+![技能树详情页](https://github.com/xixichanne/Skill-Tree-PWA/blob/master/static/img/readme/3.png)
+![分类页](https://github.com/xixichanne/Skill-Tree-PWA/blob/master/static/img/readme/4.png)
+![资料盒页](https://github.com/xixichanne/Skill-Tree-PWA/blob/master/static/img/readme/5.png)
+![我的技能树页](https://github.com/xixichanne/Skill-Tree-PWA/blob/master/static/img/readme/7.png)
+![新增技能树页](https://github.com/xixichanne/Skill-Tree-PWA/blob/master/static/img/readme/8.png)
+![个人中心页](https://github.com/xixichanne/Skill-Tree-PWA/blob/master/static/img/readme/6.png)
