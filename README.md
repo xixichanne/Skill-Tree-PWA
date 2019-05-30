@@ -27,3 +27,5 @@ Lavas 工程模版基于 [vue-template-vue](https://github.com/lavas-project/lav
 ## Changelog
 
 详细的 Changelog 请看 [Release Notes](https://github.com/lavas-project/lavas-template-vue/releases)
+
+![](static/img/readme/1.png)
