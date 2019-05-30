@@ -42,6 +42,6 @@ Lavas 工程模版基于 [vue-template-vue](https://github.com/lavas-project/lav
 
 <img src="https://github.com/xixichanne/Skill-Tree-PWA/raw/master/static/img/readme/7.png" alt="我的技能树页" width="375">
 
-<img src="https://github.com/xixichanne/Skill-Tree-PWA/raw/master/static/img/readme/8.png" alt="新增技能树页"width="375">
+<img src="https://github.com/xixichanne/Skill-Tree-PWA/raw/master/static/img/readme/8.png" alt="新增技能树页" width="375">
 
 <img src="https://github.com/xixichanne/Skill-Tree-PWA/raw/master/static/img/readme/6.png" alt="个人中心页" width="375">
